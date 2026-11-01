@@ -1,0 +1,4 @@
+method,best_feasible_waiting_slots,exact_feasible_probability,sampled_feasible_rate,exact_optimal_probability,full_qubo_energy,cost_expectation_queries,feedback_expectation_queries,logical_gate_count,logical_depth,seconds
+Exact enumeration,0,,,,,,,,,6.455600123445038e-05
+QAOA,0,0.23665042085654578,0.231689453125,0.1721321358839982,2.3847984638672823,161,0,136,50,2.8218668610006716
+FALQON,0,0.4089509515263896,0.410400390625,0.338560552284207,2.131776992111527,65,64,4096,1103,1.9545272499999555

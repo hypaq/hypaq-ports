@@ -1,0 +1,9 @@
+{
+  "experiment_id": "berth_qaoa_falqon_ket_v1",
+  "instance_path": "data/synthetic/berth_tiny_v1.json",
+  "classical_base_commit": "d094fc6c65504636a47b8bb5d2fcaa4ac1207944",
+  "common": {"seed": 42, "shots": 4096, "sampling": "state_snapshot", "simulator": "sparse"},
+  "qaoa": {"p": 2, "max_evaluations": 80, "restarts": 2},
+  "falqon": {"layers": 64, "delta_t": 0.05},
+  "comparison_note": "Illustrative configuration, not matched resources or a multi-instance performance benchmark"
+}
