@@ -1,0 +1,16 @@
+{
+  "instance_id": "cranes_tiny_v1",
+  "schema_version": "0.1",
+  "provenance": "Handcrafted educational synthetic data; not real equipment productivity",
+  "time_unit": "abstract_slot",
+  "service_unit": "abstract_work_unit",
+  "slots": [0, 1],
+  "cranes": [
+    {"id": "QC1", "units_per_slot": 4},
+    {"id": "QC2", "units_per_slot": 4}
+  ],
+  "vessels": [
+    {"id": "V1", "demand_units": 8},
+    {"id": "V2", "demand_units": 8}
+  ]
+}

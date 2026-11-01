@@ -1,0 +1,7 @@
+{
+  "scenario_id": "disruption_tiny_v1",
+  "base_instance": "berth_tiny_v1.json",
+  "event": {"type": "arrival_delay", "vessel": "V1", "delay_slots": 1},
+  "change_weight_waiting_slots_per_vessel": 2,
+  "assumption": "Offline replanning before any service has started; no frozen assignments"
+}

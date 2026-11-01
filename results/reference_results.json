@@ -1,0 +1,235 @@
+{
+  "package_version": "0.0.1",
+  "python_version": "3.12.14",
+  "execution": "classical_standard_library_only",
+  "quantum_execution": false,
+  "instance_ids": [
+    "berth_tiny_v1",
+    "cranes_tiny_v1",
+    "disruption_tiny_v1"
+  ],
+  "berth": {
+    "status": "OPTIMAL",
+    "method": "exhaustive_enumeration",
+    "schedule": [
+      {
+        "vessel": "V1",
+        "berth": "B1",
+        "slot": 0
+      },
+      {
+        "vessel": "V2",
+        "berth": "B1",
+        "slot": 1
+      }
+    ],
+    "metrics": {
+      "feasible": true,
+      "violations": [],
+      "total_waiting_slots": 0,
+      "changed_vessels": 0
+    },
+    "score": 0,
+    "change_weight": 0,
+    "assignments_examined": 8
+  },
+  "berth_qubo": {
+    "binary_variables": 8,
+    "bitstrings_evaluated": 256,
+    "penalty": 2,
+    "offset": 4,
+    "minimum_energy": 0,
+    "ground_states": [
+      {
+        "bits": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "metrics": {
+          "feasible": true,
+          "violations": [],
+          "total_waiting_slots": 0,
+          "changed_vessels": 0
+        }
+      },
+      {
+        "bits": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "metrics": {
+          "feasible": true,
+          "violations": [],
+          "total_waiting_slots": 0,
+          "changed_vessels": 0
+        }
+      },
+      {
+        "bits": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "metrics": {
+          "feasible": true,
+          "violations": [],
+          "total_waiting_slots": 0,
+          "changed_vessels": 0
+        }
+      },
+      {
+        "bits": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "metrics": {
+          "feasible": true,
+          "violations": [],
+          "total_waiting_slots": 0,
+          "changed_vessels": 0
+        }
+      }
+    ],
+    "max_qubo_ising_energy_error": 0
+  },
+  "cranes": {
+    "status": "OPTIMAL",
+    "method": "exhaustive_enumeration",
+    "objective_order": [
+      "total_unmet_units",
+      "active_crane_slots"
+    ],
+    "schedule": [
+      {
+        "crane": "QC1",
+        "slot": 0,
+        "vessel": "V1"
+      },
+      {
+        "crane": "QC1",
+        "slot": 1,
+        "vessel": "V1"
+      },
+      {
+        "crane": "QC2",
+        "slot": 0,
+        "vessel": "V2"
+      },
+      {
+        "crane": "QC2",
+        "slot": 1,
+        "vessel": "V2"
+      }
+    ],
+    "metrics": {
+      "feasible": true,
+      "violations": [],
+      "served_units": {
+        "V1": 8,
+        "V2": 8
+      },
+      "unmet_units": {
+        "V1": 0,
+        "V2": 0
+      },
+      "total_unmet_units": 0,
+      "active_crane_slots": 4,
+      "utilization": 1.0
+    },
+    "assignments_examined": 81
+  },
+  "disruption": {
+    "configuration": {
+      "scenario_id": "disruption_tiny_v1",
+      "base_instance": "berth_tiny_v1.json",
+      "event": {
+        "type": "arrival_delay",
+        "vessel": "V1",
+        "delay_slots": 1
+      },
+      "change_weight_waiting_slots_per_vessel": 2,
+      "assumption": "Offline replanning before any service has started; no frozen assignments"
+    },
+    "original_plan_under_disruption": {
+      "feasible": false,
+      "violations": [
+        "Service before arrival: V1"
+      ],
+      "total_waiting_slots": null,
+      "changed_vessels": null
+    },
+    "free_replanning": {
+      "status": "OPTIMAL",
+      "method": "exhaustive_enumeration",
+      "schedule": [
+        {
+          "vessel": "V1",
+          "berth": "B1",
+          "slot": 1
+        },
+        {
+          "vessel": "V2",
+          "berth": "B2",
+          "slot": 1
+        }
+      ],
+      "metrics": {
+        "feasible": true,
+        "violations": [],
+        "total_waiting_slots": 0,
+        "changed_vessels": 2
+      },
+      "score": 0,
+      "change_weight": 0,
+      "assignments_examined": 4
+    },
+    "stable_replanning": {
+      "status": "OPTIMAL",
+      "method": "exhaustive_enumeration",
+      "schedule": [
+        {
+          "vessel": "V1",
+          "berth": "B2",
+          "slot": 1
+        },
+        {
+          "vessel": "V2",
+          "berth": "B1",
+          "slot": 1
+        }
+      ],
+      "metrics": {
+        "feasible": true,
+        "violations": [],
+        "total_waiting_slots": 0,
+        "changed_vessels": 1
+      },
+      "score": 2,
+      "change_weight": 2,
+      "assignments_examined": 4
+    }
+  }
+}

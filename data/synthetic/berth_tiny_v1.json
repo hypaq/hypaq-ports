@@ -1,0 +1,14 @@
+{
+  "instance_id": "berth_tiny_v1",
+  "schema_version": "0.1",
+  "provenance": "Handcrafted educational synthetic data; not a real terminal",
+  "time_unit": "abstract_slot",
+  "slot_duration_minutes": 60,
+  "berths": ["B1", "B2"],
+  "slots": [0, 1],
+  "vessels": [
+    {"id": "V1", "arrival_slot": 0, "service_slots": 1, "compatible_berths": ["B1", "B2"]},
+    {"id": "V2", "arrival_slot": 1, "service_slots": 1, "compatible_berths": ["B1", "B2"]}
+  ],
+  "unavailable": []
+}
