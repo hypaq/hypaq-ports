@@ -1,148 +1,271 @@
-# HYPAQ Ports — Development and implementation guide
+# BAP — OR-Tools CP-SAT adapter and additional scenario
 
-The public alpha contains three executable classical notebooks, exact
-enumeration references, a berth QUBO/Ising formulation, and three quantum BAP
-notebooks running QAOA and FALQON through Ket on the KBW CPU simulator.
-Quantum notebooks include experiment plots. CP-SAT, AI assistance, operational
-schedule timelines, hardware execution, and terminal integration remain planned.
+This optional adapter solves the **existing discrete, one-slot Berth Allocation
+Problem** using OR-Tools CP-SAT. It accepts the same base instance dictionary as
+`solve_berth_exact(instance)` and returns the same operational schedule format.
 
-The classical solver is **exhaustive enumeration**, not OR-Tools CP-SAT.
-Quantum execution is currently limited to the supplied tiny BAP. Crane allocation
-and disruption/replanning remain classical examples. See the
-[quantum methodology](quantum/README.md) and [validation record](quantum/VALIDATION.md).
+The adapter is in [`src/hypaq_ports/classical/cpsat.py`](../../src/hypaq_ports/classical/cpsat.py).
+It reuses the shared schema checker and independent operational validator.
+It does not call enumeration or the quantum backend and does not use QUBO penalties.
+The original enumeration and Ket implementations remain available.
 
-## Implementation status
+The executable demo, notebook, comparisons, optional requirements, additional
+input, reports, and tests are in
+[`scenarios/bap_cpsat/`](../../scenarios/bap_cpsat/README.md).
+This scenario is available on `main` alongside the original examples. The
+original `v0.1.0-alpha.1` source snapshot does not contain the CP-SAT adapter or
+this additional scenario. Documentation changes do not modify existing tags.
 
-| Component | Current status |
-| --- | --- |
-| Classical BAP, crane allocation, and arrival-delay replanning | Implemented with exact exhaustive enumeration and independent metrics/validators. |
-| BAP QUBO and Ising mapping | Implemented; full constant offset retained in energy comparisons. |
-| BAP QAOA and FALQON | Implemented with Ket/KBW on the supplied eight-qubit instance. |
-| Quantum plots, experiment configuration, and JSON/CSV reports | Available in the quantum notebooks and results directory. |
-| OR-Tools CP-SAT | Planned; not an implemented backend or runtime dependency of this alpha. |
-| Quantum crane allocation and quantum replanning | Planned; the corresponding current exercises are classical. |
-| AI assistant, operational schedule timelines, and live terminal integration | Planned. |
-| Quantum hardware execution and other backends | Planned; current quantum experiments run on the KBW CPU simulator. |
+## Install
 
-Start with the [main README](../README.md), the [classical guide](../START_HERE.md),
-or the [quantum guide](../QUANTUM_START_HERE.md).
-
-## Model conventions
-
-Berth services last exactly one slot. Every vessel must be assigned once, no
-earlier than arrival, to a compatible and available berth. Overlaps are forbidden.
-The objective is total waiting time in slots. The two-slot instance contains eight
-binary variables in its full vessel/berth/slot encoding.
-
-The QUBO is upper triangular (no automatic doubling of off-diagonal terms):
-
-`E(x) = offset + sum(Q[i,j] * x[i] * x[j], i <= j)`.
-
-It adds one-hot penalties `A*(sum(x_v)-1)^2`, `A*x` for forbidden choices,
-and `A*x_i*x_j` for different vessels occupying the same berth/slot.
-Waiting coefficients are nonnegative. The default A is larger than an upper
-bound on any feasible waiting cost; if a feasible assignment exists, no
-infeasible assignment can be a ground state. Infeasible instances still require
-independent feasibility checks: low energy alone is not a feasibility certificate.
-
-The Ising mapping uses `x=(1-z)/2`, where `z` is +1 or -1. The conversion preserves
-the full additive constant. Both transformations are checked over all 256 binary
-assignments of the supplied berth instance. These classical mapping checks do
-not execute circuits; separate quantum integration tests do execute Ket/KBW
-circuits and check them against independent NumPy calculations.
-
-Crane allocation is independent of the berth schedule. Every vessel is available
-in every period. Cranes may be idle and can serve at most one vessel per period.
-Productivity is fixed. The exact objective is lexicographic: minimize unmet work,
-then minimize active crane-slots. Oversupply is allowed and served demand is
-clipped. Interference, travel and non-crossing are not modeled.
-
-Replanning is offline, before any service has started. It supports a vessel
-arrival delay; no assignments are frozen. Stability counts the number of vessels
-whose `(berth, slot)` pair differs from the original plan. The stability objective
-is `waiting_slots + change_weight * changed_vessels`. The two objective terms
-must be reported separately. Berth outages are supported in BAP data through
-`unavailable`, but no outage-specific notebook scenario is included yet.
-
-## Execution
-
-All commands below must be run from the cloned repository root, not from `docs/`.
-
-### Classical path
-
-From the repository root, Python 3.10+ is sufficient for the classical reference code:
+Use Python 3.11+ for the pinned dependency set; tested on Python 3.12.14,
+Linux x86_64. Run all shell commands in this guide from the **repository root**,
+not from `docs/classical/`. A separate virtual environment preserves the
+dependencies of your existing demos:
 
 ```bash
-python -m unittest discover -s tests -p "test_reference.py" -v
-python results/generate_reference.py
+python -m venv .venv-cpsat
 ```
 
-The reference generator and notebooks configure their import path automatically.
-Open classical notebooks in a Jupyter environment; their code cells require only
-the standard library. See the [classical notebook guide](../notebooks/README.md).
+Activate it with `source .venv-cpsat/bin/activate` on Linux/macOS,
+`.venv-cpsat\Scripts\activate` in Windows cmd, or
+`.venv-cpsat\Scripts\Activate.ps1` in PowerShell. Then install:
 
-### Quantum path
+```bash
+python -m pip install -r scenarios/bap_cpsat/requirements.txt
+```
 
-For quantum BAP experiments, use Python 3.11+ for the pinned dependencies
-(recorded environment: Python 3.12.14, Linux x86_64):
+This installs OR-Tools and NumPy. Ket is not required for CP-SAT or the
+enumeration/CP-SAT comparison. Platform-specific wheel availability must be
+checked for the chosen operating system, architecture, and Python version.
+
+The adapter imports OR-Tools only when called. Original standard-library
+references remain usable without it. Dependency errors are explicit; the adapter
+never silently falls back to exhaustive enumeration.
+
+## Python API
+
+From a Python session or notebook whose working directory is the repository
+root, add `src/` to the import path and import the existing adapter module directly:
+
+```python
+from pathlib import Path
+import sys
+
+ROOT = Path.cwd()
+sys.path.insert(0, str(ROOT / "src"))
+
+from hypaq_ports.classical.cpsat import solve_berth_cpsat
+from hypaq_ports.reference import load_json
+
+instance = load_json(ROOT / "data/synthetic/berth_tiny_v1.json")
+result = solve_berth_cpsat(
+    instance,
+    time_limit_seconds=10.0,
+    num_workers=1,
+    random_seed=42,
+)
+print(result["status"])
+if result["has_solution"]:
+    print(result["schedule"])
+    print(result["metrics"]["total_waiting_slots"])
+print(result["elapsed_seconds"])
+```
+
+The import is `from hypaq_ports.classical.cpsat import solve_berth_cpsat`;
+it does not require adding or modifying a package `__init__.py`.
+The scenario's `run_demo.py`, `compare.py`, and notebook configure the source
+path themselves. The notebook also detects the repository root.
+
+## Supported model
+
+- Each vessel has an integer, nonnegative arrival slot and service duration **1**.
+- Each vessel is assigned to exactly one listed slot and compatible berth.
+- Service cannot precede arrival or use a listed unavailable berth/slot.
+- At most one vessel occupies each berth/slot.
+- The objective is `sum(service_slot - arrival_slot)` across vessels.
+- Slots may be unsorted or nonconsecutive; differences use their integer values.
+- No input data is mutated. Metadata such as slot duration is preserved in input
+  but does not change the objective's unit of waiting slots.
+
+Only admissible assignment choices receive Boolean variables. An empty choice
+set makes the model infeasible. This differs from the full binary encoding of
+the quantum formulation but represents the same supported operational problem.
+
+This adapter does not implement crane allocation, varying service durations,
+replanning stability costs, frozen assignments, navigation channels, tides, or
+live terminal integration. It is not a general CP-SAT model converter.
+
+## Status and output contract
+
+| Status | Incumbent schedule? | Interpretation |
+| --- | --- | --- |
+| `OPTIMAL` | Yes | Feasible schedule and optimality proved by CP-SAT. |
+| `FEASIBLE` | Yes | Feasible incumbent, without proof of optimality. |
+| `INFEASIBLE` | No | CP-SAT proved this model has no feasible schedule. |
+| `UNKNOWN` | No | No incumbent available; do not infer infeasibility. |
+| `MODEL_INVALID` | No | The model was rejected; investigate the model/solver configuration. |
+
+`score` equals total waiting slots. `metrics` comes from `berth_metrics`, and
+every returned incumbent is independently checked before it is exposed.
+For statuses without an incumbent, `schedule=[]` and `metrics`, `score`,
+`best_objective_bound`, and `absolute_gap` are `None`.
+
+`proven_optimal` follows the native status. It is not changed to true merely
+because an incumbent matches an externally known optimum or has zero waiting.
+`best_objective_bound` is the solver's lower bound when an incumbent exists;
+`absolute_gap` is its nonnegative difference from `score`. Invalid input/options
+raise input errors rather than being mislabeled as an infeasible problem.
+
+Reported timings are separate:
+
+- `elapsed_seconds`: input checks, model construction, solve, decoding, and
+  operational validation; excludes dependency imports.
+- `solver_wall_time_seconds`: CP-SAT's own solve time.
+- `time_limit_seconds`: applies to solving, not the full Python function.
+
+The default is one worker with seed 42. Multiple workers may change search
+behavior; neither seed nor worker count guarantees identical tie-breaking across
+OR-Tools releases. Optimal schedules can differ from the enumeration schedule
+while sharing the same objective and satisfying the same constraints.
+
+The supported full linear waiting-cost activity is limited to `2**53 - 1` to
+avoid silently rounding integer objectives/bounds in the reported double values.
+The classical references retain their existing input schema checks; unsupported
+durations and malformed domains must be corrected by the caller.
+
+## Run and compare
+
+### CP-SAT demo
+
+```bash
+python scenarios/bap_cpsat/run_demo.py
+```
+
+This reads the original `data/synthetic/berth_tiny_v1.json` and prints the solver
+report without writing files. The expected optimum is zero waiting slots.
+The report includes the schedule, operational metrics, status, bound and timings.
+
+### Enumeration and CP-SAT, without Ket
+
+```bash
+python scenarios/bap_cpsat/compare.py --output-prefix scenarios/bap_cpsat/results/my_classical_run
+```
+
+This executes both methods and writes
+`scenarios/bap_cpsat/results/my_classical_run.json` and `.csv`.
+It does not reuse archived timing or quantum reports. The JSON contains the
+input, configuration, statuses, schedules, metrics, bounds, environment, and
+timing notes. Cross-method objectives use waiting slots, not penalized QUBO energy.
+
+### Four-method comparison with Ket/KBW
+
+Install the unchanged quantum requirements in the same optional environment,
+then execute enumeration, CP-SAT, QAOA, and FALQON:
 
 ```bash
 python -m pip install -r requirements-quantum.txt
-python -m unittest discover -s tests -v
-python results/quantum/run_berth_comparison.py
+python scenarios/bap_cpsat/compare.py --include-quantum --output-prefix scenarios/bap_cpsat/results/my_four_method_run
 ```
 
-Full discovery includes ten classical tests and ten quantum integration tests
-and therefore requires Ket and NumPy. For a classical-only environment, use
-the filtered `test_reference.py` command above.
-Jupyter is installed separately if needed. Local and Colab setup instructions
-are in the [quantum notebook guide](../notebooks/quantum/README.md); external
-Jupyter/Colab execution was not validated in the recorded build environment.
+### Additional positive-waiting input
 
-## Quantum execution and result interpretation
+The additional [six-qubit instance](../../scenarios/bap_cpsat/data/berth_waiting_v1.json)
+has two vessels arriving at slot 0, one berth, and three slots. Its optimum is
+one waiting slot. Run CP-SAT alone:
 
-The default BAP encodes two vessels, two berths, and two slots with eight qubits.
-The same operational constraints and classical reference are shared by QAOA and
-FALQON. Both use a transverse-X mixer; a feasibility-preserving mixer is not
-implemented. Decoded solutions are checked against the original constraints.
+```bash
+python scenarios/bap_cpsat/run_demo.py --instance scenarios/bap_cpsat/data/berth_waiting_v1.json
+```
 
-QAOA optimization and FALQON feedback use exact simulated state-vector
-expectations. The default final counts use seeded classical sampling from a KBW
-state snapshot. Optional native KBW sampling is supported, but neither path
-executes on quantum hardware. Exact simulator probabilities are diagnostics,
-not hardware measurements.
+Or compare all four methods after installing the quantum dependencies:
 
-Published reports distinguish operational waiting time, penalized QUBO energy,
-feasibility/optimality probabilities, empirical sample frequencies, logical gate
-counts/depth, and environment-specific timing. The quantum methods found samples
-matching the zero-wait classical optimum in the recorded run, while their full
-state distributions also contain infeasible assignments.
+```bash
+python scenarios/bap_cpsat/compare.py --include-quantum --instance scenarios/bap_cpsat/data/berth_waiting_v1.json --output-prefix scenarios/bap_cpsat/results/my_waiting_run
+```
 
-The algorithms have different resource budgets and are evaluated on one tiny
-synthetic instance. This does not establish quantum speedup, a general algorithm
-ranking, global heuristic optimality, or industrial readiness. FALQON's finite-step
-energy trace is monitored rather than assumed to be strictly monotonic.
+The `my_*` output prefixes retain the supplied example reports. Without an
+explicit prefix, the comparison overwrites its own
+`scenarios/bap_cpsat/results/bap_comparison.json` and `.csv`. The CLI rejects
+prefixes outside the additional scenario directory. Neither the root classical
+reports nor the original quantum reports are rewritten by this scenario.
 
-See the [quantum results guide](../results/quantum/README.md),
-[experiment configuration](../results/quantum/berth_experiment.json),
-[CSV summary](../results/quantum/berth_comparison_summary.csv),
-and [validation record](quantum/VALIDATION.md).
+The original `results/quantum/berth_experiment.json` supplies quantum budgets.
+The new input is passed directly to all methods. `HEURISTIC` remains the status
+of quantum results even when a sampled solution matches the reference optimum.
+An infeasible model, an encoding above the existing 12-qubit limit, or missing
+classical feasibility evidence produces explicit `SKIPPED` quantum rows.
+Actual runtime or dependency errors fail visibly instead of becoming fake results.
 
-## Roadmap and acceptance criteria
+For larger classical instances, `--skip-enumeration` avoids the comparison
+script's exhaustive reference. The default enumeration guard permits at most
+100000 candidate combinations; `--enumeration-limit` changes this threshold.
+The CP-SAT adapter itself has no enumeration dependency. Original quantum
+runners still compute their own tiny exact reference internally.
 
-| Stage | Deliverable | Acceptance criterion |
-| --- | --- | --- |
-| Available: classical exercises | Three notebooks, exact references, BAP QUBO/Ising, inputs and outputs. | Ten classical behavioral checks; explicit feasibility and energy equivalence tests. |
-| Available: Ket/KBW | Eight-qubit BAP QAOA and FALQON, comparison, plots, and reports. | Ten quantum integration checks recorded; versions, angles, sampling, resources, and limitations documented. |
-| Next: CP-SAT | A solver adapter using the same inputs and validator. | Match exact objectives on tiny feasible instances; distinguish feasible/optimal/infeasible statuses. |
-| Later: operational visualizations | Berth and crane timelines and scenario comparison. | Display actual computed schedules and explicit units. |
-| Later: AI assistance | Structured scenario updates and grounded explanations. | Validate inputs before execution and cite calculated outputs in explanations. |
+These are illustrative comparisons on tiny synthetic instances, not a matched
+resource benchmark or evidence of speedup. Quantum timers and final-circuit
+counts have different scopes from classical solver timing; the detailed reports
+state those differences. Neither quantum hardware nor GPU execution is involved.
 
-Keep original synthetic data separate from partner data. Document provenance,
-units, assumptions, and third-party licensing before adding materials. Existing
-research repositories keep their own licenses; this package does not copy their
-code. Open an issue before proposing major scope changes.
+## Notebook and recorded outputs
 
-References: [Ket](https://quantumket.org/),
-[OR-Tools CP-SAT](https://developers.google.com/optimization/cp/cp_solver)
-(reference for a planned adapter, not an implemented backend).
+Open the additional [CP-SAT notebook](../../scenarios/bap_cpsat/01_bap_cpsat.ipynb)
+with a separately installed Jupyter interface and select the kernel belonging
+to the optional environment. Its Python cells compare enumeration and CP-SAT
+on both inputs without writing reports. Full Jupyter/Colab kernel execution
+was not validated for this scenario; the code cells were executed in-process.
+
+The original six classical/quantum notebooks retain their computations and saved
+outputs. Recorded comparisons are available separately:
+
+- [Original-input comparison CSV](../../scenarios/bap_cpsat/results/bap_comparison.csv).
+- [Positive-waiting comparison CSV](../../scenarios/bap_cpsat/results/bap_waiting_comparison.csv).
+- [Detailed JSON reports](../../scenarios/bap_cpsat/results/).
+
+## Tests
+
+Run the 22 additional scenario tests after installing its requirements:
+
+```bash
+python -m unittest discover -s scenarios/bap_cpsat/tests -v
+```
+
+Adapter/comparison checks are explicitly skipped if optional OR-Tools is absent.
+A complete scenario run must pass all 22 tests without skips. This command does
+not require Ket.
+
+The 20 original classical/quantum tests remain in `tests/`. To run both suites,
+install the scenario and quantum dependency sets, then execute both commands:
+
+```bash
+python -m pip install -r scenarios/bap_cpsat/requirements.txt -r requirements-quantum.txt
+python -m unittest discover -s tests -v
+python -m unittest discover -s scenarios/bap_cpsat/tests -v
+```
+
+The expected total is **42 tests: 20 original plus 22 additional**.
+Discovery in `tests/` alone does not run the separate scenario suite.
+To run only the ten original standard-library checks without OR-Tools or Ket:
+
+```bash
+python -m unittest discover -s tests -p "test_reference.py" -v
+```
+
+Parity tests compare CP-SAT with enumeration over 128 seeded small instances.
+Controlled native-status overrides exercise `FEASIBLE`, `UNKNOWN`, and
+`MODEL_INVALID` branches without relying on nondeterministic timeouts; these
+status tests are not performance measurements. See the
+[scenario validation record](../../scenarios/bap_cpsat/VALIDATION.md) for executed
+checks, recorded versions, and limitations. These are local validation results;
+they do not constitute an independent external reproduction.
+
+## References and license
+
+- [Google OR-Tools CP-SAT guide and statuses](https://developers.google.com/optimization/cp/cp_solver).
+- [Additional BAP CP-SAT scenario guide](../../scenarios/bap_cpsat/README.md).
+- [Shared HYPAQ model conventions](../README.md).
+- [Quantum methodology](../quantum/README.md).
+
+Original adapter and integration materials use the repository's Apache-2.0
+license. OR-Tools, Ket, and their dependencies retain their respective licenses.
