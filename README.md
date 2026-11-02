@@ -6,7 +6,7 @@ HYPAQ Ports is an open laboratory for learning, modeling, and evaluating optimiz
 
 The project starts with small, explainable exercises and synthetic data. Its intended evolution is a reproducible collection of problem instances, formulations, validation tools, and benchmarks that researchers, students, developers, and industry practitioners can explore and extend.
 
-> **Project status: public alpha — [v0.1.0-alpha.1](https://github.com/hypaq/hypaq-ports/releases/tag/v0.1.0-alpha.1).** Three classical notebooks, exact enumeration references, synthetic inputs, a BAP QUBO/Ising formulation, and Ket/KBW QAOA and FALQON experiments are available. Quantum experiments currently cover the tiny BAP instance only. OR-Tools CP-SAT, AI assistance, hardware execution, and terminal integration remain planned work.
+> **Project status: public alpha — [v0.1.0-alpha.1](https://github.com/hypaq/hypaq-ports/releases/tag/v0.1.0-alpha.1).** Three classical notebooks, exact enumeration references, synthetic inputs, a BAP QUBO/Ising formulation, and Ket/KBW QAOA and FALQON experiments are available. Quantum experiments currently cover the tiny BAP instance only. OR-Tools CP-SAT is already available as demo in scenarios folder. AI assistance, hardware execution, and terminal integration remain planned work.
 
 ## Why port optimization?
 
