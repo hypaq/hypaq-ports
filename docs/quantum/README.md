@@ -93,7 +93,18 @@ Final 4096-shot samples do not account for training cost: optimizer/feedback
 expectations are exact here. Same shots does not imply matched resources. This
 single tiny instance and its default parameters do not support speedup or a
 general algorithm ranking. Since the optimum is zero, use absolute objective
-gaps instead of a ratio dividing by the optimum. No OR-Tools adapter is included.
+gaps instead of a ratio dividing by the optimum.
+
+The original quantum experiment described here uses exhaustive enumeration as
+its classical reference and does not include a CP-SAT comparison. OR-Tools
+CP-SAT is already implemented in the separate
+[additional BAP scenario](../../scenarios/bap_cpsat/README.md).
+Its [live comparison runner](../../scenarios/bap_cpsat/compare.py) executes
+enumeration, CP-SAT, QAOA, and FALQON on shared inputs, reusing the existing
+quantum implementations and independent operational validators.
+The [additional comparison reports](../../scenarios/bap_cpsat/results/) are
+stored separately from the original quantum reports. This preserves the scope
+of the original experiment while making the four-method comparison available.
 
 ## Validation
 
