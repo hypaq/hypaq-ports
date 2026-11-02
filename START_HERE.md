@@ -29,16 +29,6 @@ Jupyter or Google Colab provides the notebook interface. No OR-Tools or Ket
 installation is required for this first package because their adapters have not
 yet been implemented.
 
-## Suggested README update after upload
-
-Update the existing README's project-status, repository-layout and getting-started
-paragraphs to reflect that initial classical notebooks, data, code and references
-are now present. Retain CP-SAT, Ket/KBW, QAOA, AI assistance and visualizations as
-planned work. Link the exercise notebooks and `docs/README.md` from that page.
-The complete v0.1.0 quantum exercise remains a future milestone.
-
-Suggested commit message: `Add initial smart-port exercises and exact reference models`.
-
 ## License
 
 These new original materials are intended for the existing Apache-2.0 repository.
