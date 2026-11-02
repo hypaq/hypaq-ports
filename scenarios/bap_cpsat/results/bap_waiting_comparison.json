@@ -1,0 +1,2103 @@
+{
+  "report_schema": "bap_solver_comparison_0.1",
+  "generated_at_utc": "2026-11-02T20:18:38.935266+00:00",
+  "instance": {
+    "instance_id": "berth_waiting_v1",
+    "schema_version": "0.1",
+    "provenance": "Handcrafted educational synthetic data; no real terminal data",
+    "time_unit": "abstract_slot",
+    "slot_duration_minutes": 60,
+    "berths": [
+      "B1"
+    ],
+    "slots": [
+      0,
+      1,
+      2
+    ],
+    "vessels": [
+      {
+        "id": "V1",
+        "arrival_slot": 0,
+        "service_slots": 1,
+        "compatible_berths": [
+          "B1"
+        ]
+      },
+      {
+        "id": "V2",
+        "arrival_slot": 0,
+        "service_slots": 1,
+        "compatible_berths": [
+          "B1"
+        ]
+      }
+    ],
+    "unavailable": []
+  },
+  "instance_id": "berth_waiting_v1",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39"
+  },
+  "configuration": {
+    "include_quantum": true,
+    "time_limit_seconds": 10.0,
+    "num_workers": 1,
+    "random_seed": 42,
+    "enumeration_limit": 100000,
+    "skip_enumeration": false,
+    "quantum": {
+      "experiment_id": "berth_qaoa_falqon_ket_v1",
+      "instance_path": "data/synthetic/berth_tiny_v1.json",
+      "classical_base_commit": "d094fc6c65504636a47b8bb5d2fcaa4ac1207944",
+      "common": {
+        "seed": 42,
+        "shots": 4096,
+        "sampling": "state_snapshot",
+        "simulator": "sparse"
+      },
+      "qaoa": {
+        "p": 2,
+        "max_evaluations": 80,
+        "restarts": 2
+      },
+      "falqon": {
+        "layers": 64,
+        "delta_t": 0.05
+      },
+      "comparison_note": "Illustrative configuration, not matched resources or a multi-instance performance benchmark"
+    }
+  },
+  "reference_optimal_waiting_slots": 1,
+  "results": {
+    "enumeration": {
+      "status": "OPTIMAL",
+      "method": "exhaustive_enumeration",
+      "schedule": [
+        {
+          "vessel": "V1",
+          "berth": "B1",
+          "slot": 0
+        },
+        {
+          "vessel": "V2",
+          "berth": "B1",
+          "slot": 1
+        }
+      ],
+      "metrics": {
+        "feasible": true,
+        "violations": [],
+        "total_waiting_slots": 1,
+        "changed_vessels": 0
+      },
+      "score": 1,
+      "change_weight": 0,
+      "assignments_examined": 9,
+      "elapsed_seconds": 5.2789000619668514e-05
+    },
+    "cpsat": {
+      "status": "OPTIMAL",
+      "method": "ortools_cp_sat",
+      "schedule": [
+        {
+          "vessel": "V1",
+          "berth": "B1",
+          "slot": 0
+        },
+        {
+          "vessel": "V2",
+          "berth": "B1",
+          "slot": 1
+        }
+      ],
+      "metrics": {
+        "feasible": true,
+        "violations": [],
+        "total_waiting_slots": 1,
+        "changed_vessels": 0
+      },
+      "score": 1,
+      "change_weight": 0,
+      "has_solution": true,
+      "proven_optimal": true,
+      "best_objective_bound": 1.0,
+      "absolute_gap": 0.0,
+      "elapsed_seconds": 0.002336962001209031,
+      "solver_wall_time_seconds": 0.000850127,
+      "status_description": "A feasible schedule was found and optimality was proved.",
+      "model_validation_error": null,
+      "solver_statistics": {
+        "branches": 0,
+        "conflicts": 0
+      },
+      "configuration": {
+        "time_limit_seconds": 10.0,
+        "num_workers": 1,
+        "random_seed": 42,
+        "log_search_progress": false
+      },
+      "model": {
+        "vessels": 2,
+        "berths": 1,
+        "slots": 3,
+        "assignment_variables": 6,
+        "objective": "minimize_total_waiting_slots",
+        "service_slots": 1
+      },
+      "environment": {
+        "ortools": "9.14.6206"
+      },
+      "timing_scope": "input validation, model construction, solve, decoding and operational validation; excludes dependency imports"
+    },
+    "qaoa": {
+      "report_schema": "0.1",
+      "algorithm": "QAOA",
+      "instance_id": "berth_waiting_v1",
+      "quantum_circuit_executed": true,
+      "execution_target": "KBW CPU state-vector simulator",
+      "hardware_execution": false,
+      "configuration": {
+        "p": 2,
+        "max_evaluations_per_restart": 80,
+        "restarts": 2,
+        "initialization_seed": 42,
+        "simulator": "sparse",
+        "optimization_execution": "batch",
+        "final_readout_execution": "live",
+        "initialization_policy": "First restart: gamma linspace(0.1,0.3,p), beta=-0.3; remaining restarts: seeded uniform(-pi,pi)",
+        "optimizer": "SciPy COBYLA",
+        "objective_estimator": "exact KBW state-vector expectation",
+        "mixer": "sum X",
+        "parameter_order": "gammas first, then betas"
+      },
+      "environment": {
+        "python": "3.12.14",
+        "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+        "ket_lang": "0.10.4.2",
+        "ket_components": [
+          "Ket v0.10.4.2",
+          "libket v0.7.1 [rustc 1.97.1 (8bab26f4f 2026-07-14) x86_64-unknown-linux-gnu]",
+          "kbw v0.5.1 [GPU, CUDA] [rustc 1.97.1 (8bab26f4f 2026-07-14) x86_64-unknown-linux-gnu]"
+        ],
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "qubits": 6,
+      "penalty": 5,
+      "hamiltonian_scale": 4.75,
+      "hamiltonian_constant": 16.75,
+      "bit_order": "register[0] is the most significant (leftmost) bit",
+      "elapsed_seconds": 1.8898289589997148,
+      "timing_scope": "problem preparation, circuit execution, algorithm loop and final readout; excludes imports and report validation",
+      "shots": 4096,
+      "sampling_method": "state_snapshot",
+      "sampling_description": "Ket QuantumState.sample on a KBW state snapshot; classical seeded sampling",
+      "sampling_seed": 42,
+      "state_norm_before_roundoff_normalization": 1.0000008406351606,
+      "exact_distribution_source": "ket.dump on CPU KBW simulator, normalized for <=1e-4 roundoff drift",
+      "logical_gate_counts": {
+        "H": 6,
+        "RZ": 30,
+        "CNOT": 36,
+        "RX": 12
+      },
+      "logical_gate_count": 84,
+      "logical_depth": 38,
+      "resource_note": "Explicit logical gates; excludes observables, readout, compilation and feedback latency",
+      "metrics": {
+        "reference_optimal_waiting_slots": 1,
+        "expected_full_qubo_energy": 4.579360107613647,
+        "exact_feasible_probability": 0.4471511167534196,
+        "exact_optimal_probability": 0.17532586865460634,
+        "conditional_expected_feasible_waiting_slots": 1.8859171660370038,
+        "sampled_feasible_rate": 0.447509765625,
+        "sampled_optimal_rate": 0.177734375,
+        "best_sampled_feasible_waiting_slots": 1,
+        "best_sampled_absolute_gap_slots": 0,
+        "best_sampled_feasible_schedule": [
+          {
+            "vessel": "V1",
+            "berth": "B1",
+            "slot": 0
+          },
+          {
+            "vessel": "V2",
+            "berth": "B1",
+            "slot": 1
+          }
+        ],
+        "top_sampled_states": [
+          {
+            "bits": "100010",
+            "count": 379,
+            "probability": 0.08766291988472252,
+            "qubo_energy": 1,
+            "feasible": true,
+            "waiting_slots": 1,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 0
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 1
+              }
+            ]
+          },
+          {
+            "bits": "010100",
+            "count": 349,
+            "probability": 0.08766294876988381,
+            "qubo_energy": 1,
+            "feasible": true,
+            "waiting_slots": 1,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 1
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "100000",
+            "count": 347,
+            "probability": 0.08074682514524748,
+            "qubo_energy": 5,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Every vessel must have exactly one assignment"
+            ],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "000100",
+            "count": 346,
+            "probability": 0.08074683966675095,
+            "qubo_energy": 5,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Every vessel must have exactly one assignment"
+            ],
+            "schedule": [
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "001100",
+            "count": 310,
+            "probability": 0.07375583889997041,
+            "qubo_energy": 2,
+            "feasible": true,
+            "waiting_slots": 2,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 2
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "100001",
+            "count": 288,
+            "probability": 0.07375580715318528,
+            "qubo_energy": 2,
+            "feasible": true,
+            "waiting_slots": 2,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 0
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 2
+              }
+            ]
+          },
+          {
+            "bits": "000010",
+            "count": 266,
+            "probability": 0.06467105682535945,
+            "qubo_energy": 6,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Every vessel must have exactly one assignment"
+            ],
+            "schedule": [
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 1
+              }
+            ]
+          },
+          {
+            "bits": "001010",
+            "count": 263,
+            "probability": 0.06215679811735994,
+            "qubo_energy": 3,
+            "feasible": true,
+            "waiting_slots": 3,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 2
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 1
+              }
+            ]
+          },
+          {
+            "bits": "010000",
+            "count": 258,
+            "probability": 0.06467103072327073,
+            "qubo_energy": 6,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Every vessel must have exactly one assignment"
+            ],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 1
+              }
+            ]
+          },
+          {
+            "bits": "000000",
+            "count": 244,
+            "probability": 0.06657256937060614,
+            "qubo_energy": 10,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Every vessel must have exactly one assignment"
+            ],
+            "schedule": []
+          }
+        ]
+      },
+      "counts": {
+        "000000": 244,
+        "000001": 225,
+        "000010": 266,
+        "000011": 3,
+        "000100": 346,
+        "000101": 1,
+        "000110": 7,
+        "000111": 6,
+        "001000": 212,
+        "001001": 56,
+        "001010": 263,
+        "001011": 1,
+        "001100": 310,
+        "001101": 5,
+        "001110": 11,
+        "010000": 258,
+        "010001": 244,
+        "010010": 97,
+        "010011": 5,
+        "010100": 349,
+        "010101": 10,
+        "010110": 3,
+        "011000": 4,
+        "011001": 3,
+        "011010": 1,
+        "011100": 2,
+        "100000": 347,
+        "100001": 288,
+        "100010": 379,
+        "100011": 6,
+        "100100": 106,
+        "100111": 2,
+        "101001": 3,
+        "101010": 5,
+        "101011": 1,
+        "110000": 4,
+        "110001": 16,
+        "111000": 5,
+        "111111": 2
+      },
+      "probabilities": {
+        "000000": 0.06657256937060614,
+        "000001": 0.05194652467694221,
+        "000010": 0.06467105682535945,
+        "000011": 0.0006182191336909259,
+        "000100": 0.08074683966675095,
+        "000101": 0.0008529369753492465,
+        "000110": 0.0015900124378204468,
+        "000111": 0.0009618301239226858,
+        "001000": 0.05194652989544811,
+        "001001": 0.014815380561195217,
+        "001010": 0.06215679811735994,
+        "001011": 0.0007628077011813403,
+        "001100": 0.07375583889997041,
+        "001101": 0.0007195646678354897,
+        "001110": 0.0031654516713821483,
+        "001111": 1.2949973787602686e-05,
+        "010000": 0.06467103072327073,
+        "010001": 0.062156803928297664,
+        "010010": 0.019995802070554243,
+        "010011": 0.0005174674591715625,
+        "010100": 0.08766294876988381,
+        "010101": 0.0021125187066574663,
+        "010110": 0.0002788064289644163,
+        "010111": 1.2230089119060028e-05,
+        "011000": 0.0006182201770877677,
+        "011001": 0.0007628089750027685,
+        "011010": 0.0005174680093055457,
+        "011011": 0.00010129909957941677,
+        "011100": 0.0012910762472842046,
+        "011101": 8.617615480665841e-05,
+        "011110": 4.0387505870186186e-05,
+        "011111": 7.161218868829016e-05,
+        "100000": 0.08074682514524748,
+        "100001": 0.07375580715318528,
+        "100010": 0.08766291988472252,
+        "100011": 0.0012910767245554527,
+        "100100": 0.029338741563045997,
+        "100101": 0.00016930879657756488,
+        "100110": 7.100174937387787e-05,
+        "100111": 4.426938316896116e-05,
+        "101000": 0.0008529364312533943,
+        "101001": 0.0007195656618748136,
+        "101010": 0.0021125180662011954,
+        "101011": 8.617632793677541e-05,
+        "101100": 0.0001693090458890247,
+        "101101": 6.255215220533793e-05,
+        "101110": 7.660066855119127e-06,
+        "101111": 7.016220488219188e-05,
+        "110000": 0.0015900133941432711,
+        "110001": 0.0031654540119877973,
+        "110010": 0.0002788058012691482,
+        "110011": 4.038779647380975e-05,
+        "110100": 7.100155265117562e-05,
+        "110101": 7.659983772208924e-06,
+        "110110": 5.4371808510036277e-05,
+        "110111": 6.939385517090686e-05,
+        "111000": 0.0009618292204239476,
+        "111001": 1.2950237181507764e-05,
+        "111010": 1.2229976807407571e-05,
+        "111011": 7.16118117299841e-05,
+        "111100": 4.426896916618943e-05,
+        "111101": 7.0162174227616e-05,
+        "111110": 6.939378166285081e-05,
+        "111111": 0.00012766803570097088
+      },
+      "parameters": [
+        0.3024396906760387,
+        0.764083327633074,
+        -0.4646083385246393,
+        -0.20314859500575874
+      ],
+      "optimization_trace": [
+        {
+          "evaluation": 1,
+          "full_qubo_energy": 6.305886174194649
+        },
+        {
+          "evaluation": 2,
+          "full_qubo_energy": 9.760843596742351
+        },
+        {
+          "evaluation": 3,
+          "full_qubo_energy": 9.403585989753061
+        },
+        {
+          "evaluation": 4,
+          "full_qubo_energy": 8.416337793651172
+        },
+        {
+          "evaluation": 5,
+          "full_qubo_energy": 21.24628533954497
+        },
+        {
+          "evaluation": 6,
+          "full_qubo_energy": 10.645523491534965
+        },
+        {
+          "evaluation": 7,
+          "full_qubo_energy": 13.99805986699954
+        },
+        {
+          "evaluation": 8,
+          "full_qubo_energy": 6.751772929404293
+        },
+        {
+          "evaluation": 9,
+          "full_qubo_energy": 6.419735161139593
+        },
+        {
+          "evaluation": 10,
+          "full_qubo_energy": 6.2140815096540845
+        },
+        {
+          "evaluation": 11,
+          "full_qubo_energy": 5.928529312657705
+        },
+        {
+          "evaluation": 12,
+          "full_qubo_energy": 5.7771371468773935
+        },
+        {
+          "evaluation": 13,
+          "full_qubo_energy": 5.830260308684522
+        },
+        {
+          "evaluation": 14,
+          "full_qubo_energy": 6.031718968728288
+        },
+        {
+          "evaluation": 15,
+          "full_qubo_energy": 5.642202259158918
+        },
+        {
+          "evaluation": 16,
+          "full_qubo_energy": 5.579115143713592
+        },
+        {
+          "evaluation": 17,
+          "full_qubo_energy": 5.592912318932868
+        },
+        {
+          "evaluation": 18,
+          "full_qubo_energy": 5.9313683387333835
+        },
+        {
+          "evaluation": 19,
+          "full_qubo_energy": 5.546300429113911
+        },
+        {
+          "evaluation": 20,
+          "full_qubo_energy": 5.507183966249048
+        },
+        {
+          "evaluation": 21,
+          "full_qubo_energy": 5.479798458103758
+        },
+        {
+          "evaluation": 22,
+          "full_qubo_energy": 5.477822815765942
+        },
+        {
+          "evaluation": 23,
+          "full_qubo_energy": 5.472338517735578
+        },
+        {
+          "evaluation": 24,
+          "full_qubo_energy": 5.464765605485891
+        },
+        {
+          "evaluation": 25,
+          "full_qubo_energy": 5.470878837892299
+        },
+        {
+          "evaluation": 26,
+          "full_qubo_energy": 5.465084392071965
+        },
+        {
+          "evaluation": 27,
+          "full_qubo_energy": 5.447795599402337
+        },
+        {
+          "evaluation": 28,
+          "full_qubo_energy": 5.415698965994505
+        },
+        {
+          "evaluation": 29,
+          "full_qubo_energy": 5.362094840137841
+        },
+        {
+          "evaluation": 30,
+          "full_qubo_energy": 5.263049848357657
+        },
+        {
+          "evaluation": 31,
+          "full_qubo_energy": 5.155407973235691
+        },
+        {
+          "evaluation": 32,
+          "full_qubo_energy": 5.202368737983855
+        },
+        {
+          "evaluation": 33,
+          "full_qubo_energy": 5.135710508404378
+        },
+        {
+          "evaluation": 34,
+          "full_qubo_energy": 5.101783893636213
+        },
+        {
+          "evaluation": 35,
+          "full_qubo_energy": 5.039275803434233
+        },
+        {
+          "evaluation": 36,
+          "full_qubo_energy": 4.995201682926616
+        },
+        {
+          "evaluation": 37,
+          "full_qubo_energy": 4.885571949934427
+        },
+        {
+          "evaluation": 38,
+          "full_qubo_energy": 4.846219103552258
+        },
+        {
+          "evaluation": 39,
+          "full_qubo_energy": 4.754710658768241
+        },
+        {
+          "evaluation": 40,
+          "full_qubo_energy": 4.719126092221902
+        },
+        {
+          "evaluation": 41,
+          "full_qubo_energy": 4.708487101719891
+        },
+        {
+          "evaluation": 42,
+          "full_qubo_energy": 4.687922521228959
+        },
+        {
+          "evaluation": 43,
+          "full_qubo_energy": 4.743260512036528
+        },
+        {
+          "evaluation": 44,
+          "full_qubo_energy": 4.680264645712308
+        },
+        {
+          "evaluation": 45,
+          "full_qubo_energy": 4.660894156540987
+        },
+        {
+          "evaluation": 46,
+          "full_qubo_energy": 4.650664689391075
+        },
+        {
+          "evaluation": 47,
+          "full_qubo_energy": 4.66629372500325
+        },
+        {
+          "evaluation": 48,
+          "full_qubo_energy": 4.649770622441041
+        },
+        {
+          "evaluation": 49,
+          "full_qubo_energy": 4.652233503249537
+        },
+        {
+          "evaluation": 50,
+          "full_qubo_energy": 4.6465417544809196
+        },
+        {
+          "evaluation": 51,
+          "full_qubo_energy": 4.63896296785207
+        },
+        {
+          "evaluation": 52,
+          "full_qubo_energy": 4.629512293689324
+        },
+        {
+          "evaluation": 53,
+          "full_qubo_energy": 4.637080591051561
+        },
+        {
+          "evaluation": 54,
+          "full_qubo_energy": 4.624120882537884
+        },
+        {
+          "evaluation": 55,
+          "full_qubo_energy": 4.626341047547463
+        },
+        {
+          "evaluation": 56,
+          "full_qubo_energy": 4.624553202622765
+        },
+        {
+          "evaluation": 57,
+          "full_qubo_energy": 4.619094224136084
+        },
+        {
+          "evaluation": 58,
+          "full_qubo_energy": 4.6150009289177145
+        },
+        {
+          "evaluation": 59,
+          "full_qubo_energy": 4.610537520973615
+        },
+        {
+          "evaluation": 60,
+          "full_qubo_energy": 4.604404711483776
+        },
+        {
+          "evaluation": 61,
+          "full_qubo_energy": 4.600821300226139
+        },
+        {
+          "evaluation": 62,
+          "full_qubo_energy": 4.593509071403853
+        },
+        {
+          "evaluation": 63,
+          "full_qubo_energy": 4.589558730955016
+        },
+        {
+          "evaluation": 64,
+          "full_qubo_energy": 4.588289432342217
+        },
+        {
+          "evaluation": 65,
+          "full_qubo_energy": 4.5930993861552665
+        },
+        {
+          "evaluation": 66,
+          "full_qubo_energy": 4.587056376511338
+        },
+        {
+          "evaluation": 67,
+          "full_qubo_energy": 4.585071364570707
+        },
+        {
+          "evaluation": 68,
+          "full_qubo_energy": 4.5890099418024715
+        },
+        {
+          "evaluation": 69,
+          "full_qubo_energy": 4.586021815112463
+        },
+        {
+          "evaluation": 70,
+          "full_qubo_energy": 4.582159032639069
+        },
+        {
+          "evaluation": 71,
+          "full_qubo_energy": 4.581915063696888
+        },
+        {
+          "evaluation": 72,
+          "full_qubo_energy": 4.582631396064302
+        },
+        {
+          "evaluation": 73,
+          "full_qubo_energy": 4.581009168803453
+        },
+        {
+          "evaluation": 74,
+          "full_qubo_energy": 4.5836192245742975
+        },
+        {
+          "evaluation": 75,
+          "full_qubo_energy": 4.580522073411149
+        },
+        {
+          "evaluation": 76,
+          "full_qubo_energy": 4.580901650932626
+        },
+        {
+          "evaluation": 77,
+          "full_qubo_energy": 4.580820516314061
+        },
+        {
+          "evaluation": 78,
+          "full_qubo_energy": 4.5800313336860565
+        },
+        {
+          "evaluation": 79,
+          "full_qubo_energy": 4.579722198680896
+        },
+        {
+          "evaluation": 80,
+          "full_qubo_energy": 4.5793498765458285
+        },
+        {
+          "evaluation": 81,
+          "full_qubo_energy": 20.167709372969426
+        },
+        {
+          "evaluation": 82,
+          "full_qubo_energy": 17.745575051797523
+        },
+        {
+          "evaluation": 83,
+          "full_qubo_energy": 15.63702625968018
+        },
+        {
+          "evaluation": 84,
+          "full_qubo_energy": 14.234970948465179
+        },
+        {
+          "evaluation": 85,
+          "full_qubo_energy": 14.892528632610375
+        },
+        {
+          "evaluation": 86,
+          "full_qubo_energy": 16.604073133158852
+        },
+        {
+          "evaluation": 87,
+          "full_qubo_energy": 15.44637984310925
+        },
+        {
+          "evaluation": 88,
+          "full_qubo_energy": 14.199757877902936
+        },
+        {
+          "evaluation": 89,
+          "full_qubo_energy": 14.511313866360137
+        },
+        {
+          "evaluation": 90,
+          "full_qubo_energy": 14.20954316205664
+        },
+        {
+          "evaluation": 91,
+          "full_qubo_energy": 14.132564526377973
+        },
+        {
+          "evaluation": 92,
+          "full_qubo_energy": 14.155884343491614
+        },
+        {
+          "evaluation": 93,
+          "full_qubo_energy": 14.173386596931087
+        },
+        {
+          "evaluation": 94,
+          "full_qubo_energy": 14.136251116971309
+        },
+        {
+          "evaluation": 95,
+          "full_qubo_energy": 14.13160989209558
+        },
+        {
+          "evaluation": 96,
+          "full_qubo_energy": 14.139216597008181
+        },
+        {
+          "evaluation": 97,
+          "full_qubo_energy": 14.132765701268571
+        },
+        {
+          "evaluation": 98,
+          "full_qubo_energy": 14.129331914412415
+        },
+        {
+          "evaluation": 99,
+          "full_qubo_energy": 14.127959023423974
+        },
+        {
+          "evaluation": 100,
+          "full_qubo_energy": 14.12882191504674
+        },
+        {
+          "evaluation": 101,
+          "full_qubo_energy": 14.128915760408749
+        },
+        {
+          "evaluation": 102,
+          "full_qubo_energy": 14.125920598046875
+        },
+        {
+          "evaluation": 103,
+          "full_qubo_energy": 14.124034811487238
+        },
+        {
+          "evaluation": 104,
+          "full_qubo_energy": 14.122337570621463
+        },
+        {
+          "evaluation": 105,
+          "full_qubo_energy": 14.12198557973391
+        },
+        {
+          "evaluation": 106,
+          "full_qubo_energy": 14.122103005205705
+        },
+        {
+          "evaluation": 107,
+          "full_qubo_energy": 14.120481067193362
+        },
+        {
+          "evaluation": 108,
+          "full_qubo_energy": 14.117686568175891
+        },
+        {
+          "evaluation": 109,
+          "full_qubo_energy": 14.115760377603001
+        },
+        {
+          "evaluation": 110,
+          "full_qubo_energy": 14.11447495519834
+        },
+        {
+          "evaluation": 111,
+          "full_qubo_energy": 14.114143687943022
+        },
+        {
+          "evaluation": 112,
+          "full_qubo_energy": 14.1125434005019
+        },
+        {
+          "evaluation": 113,
+          "full_qubo_energy": 14.11321888909277
+        },
+        {
+          "evaluation": 114,
+          "full_qubo_energy": 14.112214987804855
+        },
+        {
+          "evaluation": 115,
+          "full_qubo_energy": 14.110378537716969
+        },
+        {
+          "evaluation": 116,
+          "full_qubo_energy": 14.109410700769308
+        },
+        {
+          "evaluation": 117,
+          "full_qubo_energy": 14.109640242708656
+        },
+        {
+          "evaluation": 118,
+          "full_qubo_energy": 14.11023700374558
+        },
+        {
+          "evaluation": 119,
+          "full_qubo_energy": 14.108199246435317
+        },
+        {
+          "evaluation": 120,
+          "full_qubo_energy": 14.107002271409954
+        },
+        {
+          "evaluation": 121,
+          "full_qubo_energy": 14.106166112989097
+        },
+        {
+          "evaluation": 122,
+          "full_qubo_energy": 14.105913681082935
+        },
+        {
+          "evaluation": 123,
+          "full_qubo_energy": 14.107221279053999
+        },
+        {
+          "evaluation": 124,
+          "full_qubo_energy": 14.104984967579021
+        },
+        {
+          "evaluation": 125,
+          "full_qubo_energy": 14.103616896360924
+        },
+        {
+          "evaluation": 126,
+          "full_qubo_energy": 14.103867334644487
+        },
+        {
+          "evaluation": 127,
+          "full_qubo_energy": 14.102984597664038
+        },
+        {
+          "evaluation": 128,
+          "full_qubo_energy": 14.102511327949667
+        },
+        {
+          "evaluation": 129,
+          "full_qubo_energy": 14.102407687544948
+        },
+        {
+          "evaluation": 130,
+          "full_qubo_energy": 14.10210336702047
+        },
+        {
+          "evaluation": 131,
+          "full_qubo_energy": 14.101591975181805
+        },
+        {
+          "evaluation": 132,
+          "full_qubo_energy": 14.100998245477127
+        },
+        {
+          "evaluation": 133,
+          "full_qubo_energy": 14.101433093816496
+        },
+        {
+          "evaluation": 134,
+          "full_qubo_energy": 14.100834190422834
+        },
+        {
+          "evaluation": 135,
+          "full_qubo_energy": 14.100350442873534
+        },
+        {
+          "evaluation": 136,
+          "full_qubo_energy": 14.100063623311517
+        },
+        {
+          "evaluation": 137,
+          "full_qubo_energy": 14.100155022801816
+        },
+        {
+          "evaluation": 138,
+          "full_qubo_energy": 14.100111212917069
+        },
+        {
+          "evaluation": 139,
+          "full_qubo_energy": 14.099807123152386
+        },
+        {
+          "evaluation": 140,
+          "full_qubo_energy": 14.099582215063947
+        },
+        {
+          "evaluation": 141,
+          "full_qubo_energy": 14.099285393285239
+        },
+        {
+          "evaluation": 142,
+          "full_qubo_energy": 14.098963601137172
+        },
+        {
+          "evaluation": 143,
+          "full_qubo_energy": 14.098775161310682
+        },
+        {
+          "evaluation": 144,
+          "full_qubo_energy": 14.09869360438126
+        },
+        {
+          "evaluation": 145,
+          "full_qubo_energy": 14.098879547187359
+        },
+        {
+          "evaluation": 146,
+          "full_qubo_energy": 14.098648832030758
+        },
+        {
+          "evaluation": 147,
+          "full_qubo_energy": 14.098527482033166
+        },
+        {
+          "evaluation": 148,
+          "full_qubo_energy": 14.098317494445142
+        },
+        {
+          "evaluation": 149,
+          "full_qubo_energy": 14.097967655313374
+        },
+        {
+          "evaluation": 150,
+          "full_qubo_energy": 14.097621416250849
+        },
+        {
+          "evaluation": 151,
+          "full_qubo_energy": 14.097515881359424
+        },
+        {
+          "evaluation": 152,
+          "full_qubo_energy": 14.097155126346589
+        },
+        {
+          "evaluation": 153,
+          "full_qubo_energy": 14.096807833368842
+        },
+        {
+          "evaluation": 154,
+          "full_qubo_energy": 14.096239776848412
+        },
+        {
+          "evaluation": 155,
+          "full_qubo_energy": 14.095455499891354
+        },
+        {
+          "evaluation": 156,
+          "full_qubo_energy": 14.094872924594918
+        },
+        {
+          "evaluation": 157,
+          "full_qubo_energy": 14.093777351807972
+        },
+        {
+          "evaluation": 158,
+          "full_qubo_energy": 14.092504266597413
+        },
+        {
+          "evaluation": 159,
+          "full_qubo_energy": 14.090498128003578
+        },
+        {
+          "evaluation": 160,
+          "full_qubo_energy": 14.087341173345832
+        }
+      ],
+      "restart_reports": [
+        {
+          "restart": 0,
+          "success": false,
+          "message": "Return from COBYLA because the objective function has been evaluated MAXFUN times.",
+          "evaluations": 80,
+          "returned_normalized_energy": -2.5622421312535097
+        },
+        {
+          "restart": 1,
+          "success": false,
+          "message": "Return from COBYLA because the objective function has been evaluated MAXFUN times.",
+          "evaluations": 80,
+          "returned_normalized_energy": -0.5605597529798247
+        }
+      ],
+      "cost_expectation_queries": 161,
+      "feedback_expectation_queries": 0,
+      "circuit_preparations": 161,
+      "final_full_energy_from_observable": 4.5793498765458285,
+      "solution_status": "HEURISTIC; no global optimality certificate from QAOA"
+    },
+    "falqon": {
+      "report_schema": "0.1",
+      "algorithm": "FALQON",
+      "instance_id": "berth_waiting_v1",
+      "quantum_circuit_executed": true,
+      "execution_target": "KBW CPU state-vector simulator",
+      "hardware_execution": false,
+      "configuration": {
+        "layers": 64,
+        "delta_t": 0.05,
+        "beta_initial": 0.0,
+        "simulator": "sparse",
+        "execution": "live",
+        "mixer": "sum X",
+        "feedback": "beta_next = -expectation(i[H_m,H_tilde])",
+        "feedback_estimator": "exact KBW state-vector expectation",
+        "splitting": "cost then mixer; first order; fixed delta_t"
+      },
+      "environment": {
+        "python": "3.12.14",
+        "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+        "ket_lang": "0.10.4.2",
+        "ket_components": [
+          "Ket v0.10.4.2",
+          "libket v0.7.1 [rustc 1.97.1 (8bab26f4f 2026-07-14) x86_64-unknown-linux-gnu]",
+          "kbw v0.5.1 [GPU, CUDA] [rustc 1.97.1 (8bab26f4f 2026-07-14) x86_64-unknown-linux-gnu]"
+        ],
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "qubits": 6,
+      "penalty": 5,
+      "hamiltonian_scale": 4.75,
+      "hamiltonian_constant": 16.75,
+      "bit_order": "register[0] is the most significant (leftmost) bit",
+      "elapsed_seconds": 1.1617363410005055,
+      "timing_scope": "problem preparation, circuit execution, algorithm loop and final readout; excludes imports and report validation",
+      "shots": 4096,
+      "sampling_method": "state_snapshot",
+      "sampling_description": "Ket QuantumState.sample on a KBW state snapshot; classical seeded sampling",
+      "sampling_seed": 42,
+      "state_norm_before_roundoff_normalization": 0.9999771132524116,
+      "exact_distribution_source": "ket.dump on CPU KBW simulator, normalized for <=1e-4 roundoff drift",
+      "logical_gate_counts": {
+        "H": 6,
+        "RZ": 960,
+        "CNOT": 1152,
+        "RX": 378
+      },
+      "logical_gate_count": 2496,
+      "logical_depth": 905,
+      "resource_note": "Explicit logical gates; excludes observables, readout, compilation and feedback latency",
+      "metrics": {
+        "reference_optimal_waiting_slots": 1,
+        "expected_full_qubo_energy": 3.9627357576389395,
+        "exact_feasible_probability": 0.630461848542924,
+        "exact_optimal_probability": 0.37322316905151887,
+        "conditional_expected_feasible_waiting_slots": 1.5301191824244622,
+        "sampled_feasible_rate": 0.632568359375,
+        "sampled_optimal_rate": 0.3779296875,
+        "best_sampled_feasible_waiting_slots": 1,
+        "best_sampled_absolute_gap_slots": 0,
+        "best_sampled_feasible_schedule": [
+          {
+            "vessel": "V1",
+            "berth": "B1",
+            "slot": 0
+          },
+          {
+            "vessel": "V2",
+            "berth": "B1",
+            "slot": 1
+          }
+        ],
+        "top_sampled_states": [
+          {
+            "bits": "100010",
+            "count": 778,
+            "probability": 0.18661144010783123,
+            "qubo_energy": 1,
+            "feasible": true,
+            "waiting_slots": 1,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 0
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 1
+              }
+            ]
+          },
+          {
+            "bits": "010100",
+            "count": 770,
+            "probability": 0.1866117289436876,
+            "qubo_energy": 1,
+            "feasible": true,
+            "waiting_slots": 1,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 1
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "100001",
+            "count": 390,
+            "probability": 0.09012890474099541,
+            "qubo_energy": 2,
+            "feasible": true,
+            "waiting_slots": 2,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 0
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 2
+              }
+            ]
+          },
+          {
+            "bits": "001100",
+            "count": 350,
+            "probability": 0.09012853454242487,
+            "qubo_energy": 2,
+            "feasible": true,
+            "waiting_slots": 2,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 2
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "100100",
+            "count": 241,
+            "probability": 0.05348006994394252,
+            "qubo_energy": 5,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Berth conflict: B1, 0"
+            ],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 0
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "001010",
+            "count": 174,
+            "probability": 0.038490489305727446,
+            "qubo_energy": 3,
+            "feasible": true,
+            "waiting_slots": 3,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 2
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 1
+              }
+            ]
+          },
+          {
+            "bits": "010001",
+            "count": 129,
+            "probability": 0.03849075090225738,
+            "qubo_energy": 3,
+            "feasible": true,
+            "waiting_slots": 3,
+            "violations": [],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 1
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 2
+              }
+            ]
+          },
+          {
+            "bits": "000100",
+            "count": 113,
+            "probability": 0.02833031171703478,
+            "qubo_energy": 5,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Every vessel must have exactly one assignment"
+            ],
+            "schedule": [
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "100000",
+            "count": 105,
+            "probability": 0.02833019003127349,
+            "qubo_energy": 5,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Every vessel must have exactly one assignment"
+            ],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          },
+          {
+            "bits": "011100",
+            "count": 97,
+            "probability": 0.022569829953372922,
+            "qubo_energy": 8,
+            "feasible": false,
+            "waiting_slots": null,
+            "violations": [
+              "Duplicate assignment: V1"
+            ],
+            "schedule": [
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 1
+              },
+              {
+                "vessel": "V1",
+                "berth": "B1",
+                "slot": 2
+              },
+              {
+                "vessel": "V2",
+                "berth": "B1",
+                "slot": 0
+              }
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "000000": 18,
+        "000001": 27,
+        "000010": 30,
+        "000011": 2,
+        "000100": 113,
+        "000101": 10,
+        "000110": 13,
+        "001000": 18,
+        "001001": 10,
+        "001010": 174,
+        "001011": 3,
+        "001100": 350,
+        "001101": 10,
+        "001110": 73,
+        "010000": 29,
+        "010001": 129,
+        "010010": 66,
+        "010011": 10,
+        "010100": 770,
+        "010101": 85,
+        "010110": 26,
+        "011000": 3,
+        "011001": 4,
+        "011010": 6,
+        "011100": 97,
+        "011101": 5,
+        "011110": 3,
+        "100000": 105,
+        "100001": 390,
+        "100010": 778,
+        "100011": 91,
+        "100100": 241,
+        "100101": 26,
+        "100110": 55,
+        "100111": 2,
+        "101000": 11,
+        "101001": 11,
+        "101010": 85,
+        "101011": 7,
+        "101100": 26,
+        "101110": 7,
+        "110000": 21,
+        "110001": 57,
+        "110010": 31,
+        "110011": 7,
+        "110100": 46,
+        "110101": 10,
+        "110110": 3,
+        "111000": 1,
+        "111100": 1
+      },
+      "probabilities": {
+        "000000": 0.005116744074318885,
+        "000001": 0.006149662531724302,
+        "000010": 0.009363567401824502,
+        "000011": 0.0009015129918714962,
+        "000100": 0.02833031171703478,
+        "000101": 0.002595959445007573,
+        "000110": 0.004415991538931293,
+        "000111": 3.1945585525270596e-05,
+        "001000": 0.006149700834830102,
+        "001001": 0.0038868005062214312,
+        "001010": 0.038490489305727446,
+        "001011": 0.0011991803346216095,
+        "001100": 0.09012853454242487,
+        "001101": 0.0021024374250298516,
+        "001110": 0.01594182487035403,
+        "001111": 1.86284968967998e-05,
+        "010000": 0.009363666387916218,
+        "010001": 0.03849075090225738,
+        "010010": 0.014155686044277018,
+        "010011": 0.0021975669375375426,
+        "010100": 0.1866117289436876,
+        "010101": 0.019142601830112634,
+        "010110": 0.006594478708444377,
+        "010111": 3.764241141528506e-05,
+        "011000": 0.0009015470562909002,
+        "011001": 0.001199195059363879,
+        "011010": 0.0021975800360232345,
+        "011011": 0.0001426240575358221,
+        "011100": 0.022569829953372922,
+        "011101": 0.0008171269487706897,
+        "011110": 0.0011443633106152484,
+        "011111": 4.630535222205886e-07,
+        "100000": 0.02833019003127349,
+        "100001": 0.09012890474099541,
+        "100010": 0.18661144010783123,
+        "100011": 0.022569770675322395,
+        "100100": 0.05348006994394252,
+        "100101": 0.007557844493779457,
+        "100110": 0.012790987885210247,
+        "100111": 8.182968873273095e-05,
+        "101000": 0.0025959676634006706,
+        "101001": 0.0021024190426415343,
+        "101010": 0.019142618321128246,
+        "101011": 0.0008171151314122678,
+        "101100": 0.007557815831670916,
+        "101101": 0.00028731047753751944,
+        "101110": 0.001870554449429487,
+        "101111": 2.323263549733939e-06,
+        "110000": 0.0044159663499057904,
+        "110001": 0.015941867901035016,
+        "110010": 0.006594502272099132,
+        "110011": 0.0011443501054093784,
+        "110100": 0.01279092012851306,
+        "110101": 0.0018705612127961025,
+        "110110": 0.0007335512778274479,
+        "110111": 9.008375923038606e-06,
+        "111000": 3.194566005943734e-05,
+        "111001": 1.862882575207642e-05,
+        "111010": 3.764494200896569e-05,
+        "111011": 4.63026220910492e-07,
+        "111100": 8.182855726201141e-05,
+        "111101": 2.3231583730315695e-06,
+        "111110": 9.008097456474744e-06,
+        "111111": 1.2511801299682814e-07
+      },
+      "feedback_trace": [
+        {
+          "layer": 0,
+          "full_qubo_energy": 16.75,
+          "beta_applied": null,
+          "beta_next": 0.0
+        },
+        {
+          "layer": 1,
+          "full_qubo_energy": 16.749999946070186,
+          "beta_applied": 0.0,
+          "beta_next": -1.7083766583409872
+        },
+        {
+          "layer": 2,
+          "full_qubo_energy": 15.422289881981746,
+          "beta_applied": -1.7083766583409872,
+          "beta_next": -3.1458274235651014
+        },
+        {
+          "layer": 3,
+          "full_qubo_energy": 12.402865708196071,
+          "beta_applied": -3.1458274235651014,
+          "beta_next": -3.3457601267116064
+        },
+        {
+          "layer": 4,
+          "full_qubo_energy": 9.722264694264405,
+          "beta_applied": -3.3457601267116064,
+          "beta_next": -2.188896918293584
+        },
+        {
+          "layer": 5,
+          "full_qubo_energy": 8.588474148371073,
+          "beta_applied": -2.188896918293584,
+          "beta_next": -1.3144556581225288
+        },
+        {
+          "layer": 6,
+          "full_qubo_energy": 8.112093482092744,
+          "beta_applied": -1.3144556581225288,
+          "beta_next": -1.006221761029394
+        },
+        {
+          "layer": 7,
+          "full_qubo_energy": 7.803460742544804,
+          "beta_applied": -1.006221761029394,
+          "beta_next": -0.9008027260619658
+        },
+        {
+          "layer": 8,
+          "full_qubo_energy": 7.547624260620292,
+          "beta_applied": -0.9008027260619658,
+          "beta_next": -0.8533778055016296
+        },
+        {
+          "layer": 9,
+          "full_qubo_energy": 7.316625023311278,
+          "beta_applied": -0.8533778055016296,
+          "beta_next": -0.8224112882627236
+        },
+        {
+          "layer": 10,
+          "full_qubo_energy": 7.102917372565367,
+          "beta_applied": -0.8224112882627236,
+          "beta_next": -0.7948722989612499
+        },
+        {
+          "layer": 11,
+          "full_qubo_energy": 6.904825999099913,
+          "beta_applied": -0.7948722989612499,
+          "beta_next": -0.7657973926737945
+        },
+        {
+          "layer": 12,
+          "full_qubo_energy": 6.722619425883817,
+          "beta_applied": -0.7657973926737945,
+          "beta_next": -0.7331970672250574
+        },
+        {
+          "layer": 13,
+          "full_qubo_energy": 6.557098247797066,
+          "beta_applied": -0.7331970672250574,
+          "beta_next": -0.6967192752461208
+        },
+        {
+          "layer": 14,
+          "full_qubo_energy": 6.4088031967592,
+          "beta_applied": -0.6967192752461208,
+          "beta_next": -0.6571670153596085
+        },
+        {
+          "layer": 15,
+          "full_qubo_energy": 6.277638926943705,
+          "beta_applied": -0.6571670153596085,
+          "beta_next": -0.6161061684736011
+        },
+        {
+          "layer": 16,
+          "full_qubo_energy": 6.162738387643964,
+          "beta_applied": -0.6161061684736011,
+          "beta_next": -0.5754652924236232
+        },
+        {
+          "layer": 17,
+          "full_qubo_energy": 6.062539514355883,
+          "beta_applied": -0.5754652924236232,
+          "beta_next": -0.5371434712600024
+        },
+        {
+          "layer": 18,
+          "full_qubo_energy": 5.975032329976473,
+          "beta_applied": -0.5371434712600024,
+          "beta_next": -0.5027016648842184
+        },
+        {
+          "layer": 19,
+          "full_qubo_energy": 5.8980019064672735,
+          "beta_applied": -0.5027016648842184,
+          "beta_next": -0.47319643190731986
+        },
+        {
+          "layer": 20,
+          "full_qubo_energy": 5.829282331676957,
+          "beta_applied": -0.47319643190731986,
+          "beta_next": -0.44914311471421675
+        },
+        {
+          "layer": 21,
+          "full_qubo_energy": 5.76686084759263,
+          "beta_applied": -0.44914311471421675,
+          "beta_next": -0.4305755881287944
+        },
+        {
+          "layer": 22,
+          "full_qubo_energy": 5.709006372173336,
+          "beta_applied": -0.4305755881287944,
+          "beta_next": -0.4171486113510344
+        },
+        {
+          "layer": 23,
+          "full_qubo_energy": 5.654253015605612,
+          "beta_applied": -0.4171486113510344,
+          "beta_next": -0.4082367698365802
+        },
+        {
+          "layer": 24,
+          "full_qubo_energy": 5.601425226246878,
+          "beta_applied": -0.4082367698365802,
+          "beta_next": -0.4030273650450586
+        },
+        {
+          "layer": 25,
+          "full_qubo_energy": 5.549607826191053,
+          "beta_applied": -0.4030273650450586,
+          "beta_next": -0.4005769691272513
+        },
+        {
+          "layer": 26,
+          "full_qubo_energy": 5.4981595522154745,
+          "beta_applied": -0.4005769691272513,
+          "beta_next": -0.39986763215901056
+        },
+        {
+          "layer": 27,
+          "full_qubo_energy": 5.446697024989557,
+          "beta_applied": -0.39986763215901056,
+          "beta_next": -0.3998649193418854
+        },
+        {
+          "layer": 28,
+          "full_qubo_energy": 5.395092199914277,
+          "beta_applied": -0.3998649193418854,
+          "beta_next": -0.39958505621520024
+        },
+        {
+          "layer": 29,
+          "full_qubo_energy": 5.343447756953056,
+          "beta_applied": -0.39958505621520024,
+          "beta_next": -0.3981751592446692
+        },
+        {
+          "layer": 30,
+          "full_qubo_energy": 5.292077066360193,
+          "beta_applied": -0.3981751592446692,
+          "beta_next": -0.39500007310829627
+        },
+        {
+          "layer": 31,
+          "full_qubo_energy": 5.2414163810121455,
+          "beta_applied": -0.39500007310829627,
+          "beta_next": -0.3897140208866255
+        },
+        {
+          "layer": 32,
+          "full_qubo_energy": 5.19196613310735,
+          "beta_applied": -0.3897140208866255,
+          "beta_next": -0.3822951762553809
+        },
+        {
+          "layer": 33,
+          "full_qubo_energy": 5.144194792355055,
+          "beta_applied": -0.3822951762553809,
+          "beta_next": -0.3730293408510879
+        },
+        {
+          "layer": 34,
+          "full_qubo_energy": 5.09847639132963,
+          "beta_applied": -0.3730293408510879,
+          "beta_next": -0.36243925688300443
+        },
+        {
+          "layer": 35,
+          "full_qubo_energy": 5.055035874243538,
+          "beta_applied": -0.36243925688300443,
+          "beta_next": -0.3511917086852639
+        },
+        {
+          "layer": 36,
+          "full_qubo_energy": 5.013922509008591,
+          "beta_applied": -0.3511917086852639,
+          "beta_next": -0.3399822224735995
+        },
+        {
+          "layer": 37,
+          "full_qubo_energy": 4.975050476843348,
+          "beta_applied": -0.3399822224735995,
+          "beta_next": -0.3294497838761223
+        },
+        {
+          "layer": 38,
+          "full_qubo_energy": 4.93819254537029,
+          "beta_applied": -0.3294497838761223,
+          "beta_next": -0.32012115867363006
+        },
+        {
+          "layer": 39,
+          "full_qubo_energy": 4.903027934553654,
+          "beta_applied": -0.32012115867363006,
+          "beta_next": -0.31238374540823544
+        },
+        {
+          "layer": 40,
+          "full_qubo_energy": 4.869186831469994,
+          "beta_applied": -0.31238374540823544,
+          "beta_next": -0.30649261875404554
+        },
+        {
+          "layer": 41,
+          "full_qubo_energy": 4.836278787463934,
+          "beta_applied": -0.30649261875404554,
+          "beta_next": -0.3025712674362139
+        },
+        {
+          "layer": 42,
+          "full_qubo_energy": 4.803885500021277,
+          "beta_applied": -0.3025712674362139,
+          "beta_next": -0.3006448333835649
+        },
+        {
+          "layer": 43,
+          "full_qubo_energy": 4.771613486272377,
+          "beta_applied": -0.3006448333835649,
+          "beta_next": -0.3006388260167538
+        },
+        {
+          "layer": 44,
+          "full_qubo_energy": 4.739067636112015,
+          "beta_applied": -0.3006388260167538,
+          "beta_next": -0.3023967267123054
+        },
+        {
+          "layer": 45,
+          "full_qubo_energy": 4.70591488723303,
+          "beta_applied": -0.3023967267123054,
+          "beta_next": -0.30569191864687384
+        },
+        {
+          "layer": 46,
+          "full_qubo_energy": 4.671832060154204,
+          "beta_applied": -0.30569191864687384,
+          "beta_next": -0.3102252166244805
+        },
+        {
+          "layer": 47,
+          "full_qubo_energy": 4.636557494224004,
+          "beta_applied": -0.3102252166244805,
+          "beta_next": -0.3156374851219252
+        },
+        {
+          "layer": 48,
+          "full_qubo_energy": 4.5999069797775025,
+          "beta_applied": -0.3156374851219252,
+          "beta_next": -0.32151997686095474
+        },
+        {
+          "layer": 49,
+          "full_qubo_energy": 4.561775304145483,
+          "beta_applied": -0.32151997686095474,
+          "beta_next": -0.32742125684979057
+        },
+        {
+          "layer": 50,
+          "full_qubo_energy": 4.522156560302525,
+          "beta_applied": -0.32742125684979057,
+          "beta_next": -0.33288358592890754
+        },
+        {
+          "layer": 51,
+          "full_qubo_energy": 4.481159778677659,
+          "beta_applied": -0.33288358592890754,
+          "beta_next": -0.3374636369090292
+        },
+        {
+          "layer": 52,
+          "full_qubo_energy": 4.438997328868856,
+          "beta_applied": -0.3374636369090292,
+          "beta_next": -0.3407693774979488
+        },
+        {
+          "layer": 53,
+          "full_qubo_energy": 4.395990745668291,
+          "beta_applied": -0.3407693774979488,
+          "beta_next": -0.3425060668221002
+        },
+        {
+          "layer": 54,
+          "full_qubo_energy": 4.352532820776197,
+          "beta_applied": -0.3425060668221002,
+          "beta_next": -0.34249699466408146
+        },
+        {
+          "layer": 55,
+          "full_qubo_energy": 4.309065706778057,
+          "beta_applied": -0.34249699466408146,
+          "beta_next": -0.3407189738480012
+        },
+        {
+          "layer": 56,
+          "full_qubo_energy": 4.266021840318375,
+          "beta_applied": -0.3407189738480012,
+          "beta_next": -0.33730266324154723
+        },
+        {
+          "layer": 57,
+          "full_qubo_energy": 4.223783928744506,
+          "beta_applied": -0.33730266324154723,
+          "beta_next": -0.33252250088842017
+        },
+        {
+          "layer": 58,
+          "full_qubo_energy": 4.182672918007416,
+          "beta_applied": -0.33252250088842017,
+          "beta_next": -0.32676757972192105
+        },
+        {
+          "layer": 59,
+          "full_qubo_energy": 4.1428854358166305,
+          "beta_applied": -0.32676757972192105,
+          "beta_next": -0.3205050363656715
+        },
+        {
+          "layer": 60,
+          "full_qubo_energy": 4.104506860890208,
+          "beta_applied": -0.3205050363656715,
+          "beta_next": -0.3142265438574451
+        },
+        {
+          "layer": 61,
+          "full_qubo_energy": 4.067512423627663,
+          "beta_applied": -0.3142265438574451,
+          "beta_next": -0.3084122841448518
+        },
+        {
+          "layer": 62,
+          "full_qubo_energy": 4.031758003177803,
+          "beta_applied": -0.3084122841448518,
+          "beta_next": -0.30348718156248566
+        },
+        {
+          "layer": 63,
+          "full_qubo_energy": 3.9970276690617528,
+          "beta_applied": -0.30348718156248566,
+          "beta_next": -0.2997970778898596
+        },
+        {
+          "layer": 64,
+          "full_qubo_energy": 3.9630217120660394,
+          "beta_applied": -0.2997970778898596,
+          "beta_next": -0.2975887064164532
+        }
+      ],
+      "energy_increases_observed": 0,
+      "cost_expectation_queries": 65,
+      "feedback_expectation_queries": 64,
+      "circuit_preparations": 1,
+      "final_full_energy_from_observable": 3.9630217120660394,
+      "solution_status": "HEURISTIC; no global optimality or finite-step monotonicity guarantee"
+    }
+  },
+  "summary": [
+    {
+      "method": "Exact enumeration",
+      "status": "OPTIMAL",
+      "has_feasible_solution": true,
+      "proven_optimal": true,
+      "best_feasible_waiting_slots": 1,
+      "reference_optimal_waiting_slots": 1,
+      "absolute_gap_to_reference": 0,
+      "matches_reference_optimum": true,
+      "elapsed_seconds": 5.2789000619668514e-05,
+      "solver_wall_time_seconds": null,
+      "best_objective_bound": null,
+      "exact_feasible_probability": null,
+      "exact_optimal_probability": null,
+      "sampled_feasible_rate": null,
+      "logical_gate_count": null,
+      "logical_depth": null,
+      "cost_expectation_queries": null,
+      "feedback_expectation_queries": null,
+      "note": ""
+    },
+    {
+      "method": "OR-Tools CP-SAT",
+      "status": "OPTIMAL",
+      "has_feasible_solution": true,
+      "proven_optimal": true,
+      "best_feasible_waiting_slots": 1,
+      "reference_optimal_waiting_slots": 1,
+      "absolute_gap_to_reference": 0,
+      "matches_reference_optimum": true,
+      "elapsed_seconds": 0.002336962001209031,
+      "solver_wall_time_seconds": 0.000850127,
+      "best_objective_bound": 1.0,
+      "exact_feasible_probability": null,
+      "exact_optimal_probability": null,
+      "sampled_feasible_rate": null,
+      "logical_gate_count": null,
+      "logical_depth": null,
+      "cost_expectation_queries": null,
+      "feedback_expectation_queries": null,
+      "note": ""
+    },
+    {
+      "method": "QAOA (Ket/KBW)",
+      "status": "HEURISTIC",
+      "has_feasible_solution": true,
+      "proven_optimal": false,
+      "best_feasible_waiting_slots": 1,
+      "reference_optimal_waiting_slots": 1,
+      "absolute_gap_to_reference": 0,
+      "matches_reference_optimum": true,
+      "elapsed_seconds": 1.8898289589997148,
+      "solver_wall_time_seconds": null,
+      "best_objective_bound": null,
+      "exact_feasible_probability": 0.4471511167534196,
+      "exact_optimal_probability": 0.17532586865460634,
+      "sampled_feasible_rate": 0.447509765625,
+      "logical_gate_count": 84,
+      "logical_depth": 38,
+      "cost_expectation_queries": 161,
+      "feedback_expectation_queries": 0,
+      "note": ""
+    },
+    {
+      "method": "FALQON (Ket/KBW)",
+      "status": "HEURISTIC",
+      "has_feasible_solution": true,
+      "proven_optimal": false,
+      "best_feasible_waiting_slots": 1,
+      "reference_optimal_waiting_slots": 1,
+      "absolute_gap_to_reference": 0,
+      "matches_reference_optimum": true,
+      "elapsed_seconds": 1.1617363410005055,
+      "solver_wall_time_seconds": null,
+      "best_objective_bound": null,
+      "exact_feasible_probability": 0.630461848542924,
+      "exact_optimal_probability": 0.37322316905151887,
+      "sampled_feasible_rate": 0.632568359375,
+      "logical_gate_count": 2496,
+      "logical_depth": 905,
+      "cost_expectation_queries": 65,
+      "feedback_expectation_queries": 64,
+      "note": ""
+    }
+  ],
+  "limitations": [
+    "Simplified discrete BAP with one-slot services and synthetic data",
+    "Different formulations and compute budgets; not a speedup or algorithm-ranking benchmark",
+    "Elapsed times exclude dependency imports and have method-specific scope; see each detailed report",
+    "Original Ket runners include exact tiny-reference preparation and exclude final report validation from their timer",
+    "Quantum expectations are exact simulator values; default final sampling uses a state snapshot",
+    "Logical final-circuit resources are not total training or hardware costs",
+    "CP-SAT ties may differ from enumeration without changing objective or feasibility"
+  ]
+}

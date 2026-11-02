@@ -1,0 +1,4 @@
+# Additional CP-SAT scenario only. Ket is optional, installed separately.
+# Tested with Python 3.12.14 on Linux x86_64; use Python 3.11+ for these pins.
+ortools==9.14.6206
+numpy==2.3.5

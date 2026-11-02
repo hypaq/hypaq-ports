@@ -1,0 +1,14 @@
+{
+  "instance_id": "berth_waiting_v1",
+  "schema_version": "0.1",
+  "provenance": "Handcrafted educational synthetic data; no real terminal data",
+  "time_unit": "abstract_slot",
+  "slot_duration_minutes": 60,
+  "berths": ["B1"],
+  "slots": [0, 1, 2],
+  "vessels": [
+    {"id": "V1", "arrival_slot": 0, "service_slots": 1, "compatible_berths": ["B1"]},
+    {"id": "V2", "arrival_slot": 0, "service_slots": 1, "compatible_berths": ["B1"]}
+  ],
+  "unavailable": []
+}

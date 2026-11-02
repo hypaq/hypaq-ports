@@ -1,0 +1,5 @@
+method,status,has_feasible_solution,proven_optimal,best_feasible_waiting_slots,reference_optimal_waiting_slots,absolute_gap_to_reference,matches_reference_optimum,elapsed_seconds,solver_wall_time_seconds,best_objective_bound,exact_feasible_probability,exact_optimal_probability,sampled_feasible_rate,logical_gate_count,logical_depth,cost_expectation_queries,feedback_expectation_queries,note
+Exact enumeration,OPTIMAL,True,True,1,1,0,True,5.2789000619668514e-05,,,,,,,,,,
+OR-Tools CP-SAT,OPTIMAL,True,True,1,1,0,True,0.002336962001209031,0.000850127,1.0,,,,,,,,
+QAOA (Ket/KBW),HEURISTIC,True,False,1,1,0,True,1.8898289589997148,,,0.4471511167534196,0.17532586865460634,0.447509765625,84,38,161,0,
+FALQON (Ket/KBW),HEURISTIC,True,False,1,1,0,True,1.1617363410005055,,,0.630461848542924,0.37322316905151887,0.632568359375,2496,905,65,64,
