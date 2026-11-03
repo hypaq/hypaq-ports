@@ -2,6 +2,8 @@
 
 **Optimization Intelligence for Smart Ports — AI-First, Quantum-Ready.**
 
+![HYPAQ Ports architecture](docs/assets/hypaq-ports-architecture.png)
+
 HYPAQ Ports is an open laboratory for learning, modeling, and evaluating optimization approaches for port operations. It connects operational decisions with mathematical models, classical solvers, and quantum optimization experiments using Python and the Ket programming platform.
 
 The project starts with small, explainable exercises and synthetic data. Its intended evolution is a reproducible collection of problem instances, formulations, validation tools, and benchmarks that researchers, students, developers, and industry practitioners can explore and extend.
